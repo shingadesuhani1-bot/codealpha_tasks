@@ -1,0 +1,108 @@
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cout << "Enter the number of courses: ";
+    cin >> n;
+
+    if (n <= 0)
+    {
+        cout << "Invalid number of courses!" << endl;
+        return 1;
+    }
+
+    vector<string> courseName(n);
+    vector<double> grade(n);
+    vector<double> creditHours(n);
+
+    double totalCredits = 0;
+    double totalGradePoints = 0;
+
+    // Input course details
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\nEnter details for Course " << i + 1 << endl;
+
+        cout << "Enter course name (no spaces): ";
+        cin >> courseName[i];
+
+        cout << "Enter grade point: ";
+        cin >> grade[i];
+
+        cout << "Enter credit hours: ";
+        cin >> creditHours[i];
+
+        if (grade[i] < 0 || creditHours[i] <= 0)
+        {
+            cout << "Invalid grade or credit hours!" << endl;
+            return 1;
+        }
+
+        totalCredits += creditHours[i];
+        totalGradePoints += grade[i] * creditHours[i];
+    }
+
+    // Calculate semester GPA
+    double gpa = totalGradePoints / totalCredits;
+
+    // Input previous semester details
+    double previousCGPA, previousCredits;
+
+    cout << "\nEnter previous CGPA (0 if first semester): ";
+    cin >> previousCGPA;
+
+    cout << "Enter previous total credits (0 if first semester): ";
+    cin >> previousCredits;
+
+    if (previousCGPA < 0 || previousCredits < 0 ||
+        (previousCredits == 0 && previousCGPA != 0))
+    {
+        cout << "Invalid previous semester details!" << endl;
+        return 1;
+    }
+
+    // Calculate overall CGPA
+    double overallCGPA;
+
+    if (previousCredits == 0)
+    {
+        overallCGPA = gpa;
+    }
+    else
+    {
+        overallCGPA =
+            (previousCGPA * previousCredits + totalGradePoints) /
+            (previousCredits + totalCredits);
+    }
+
+    // Display course details
+    cout << fixed << setprecision(2);
+
+    cout << "\n========== COURSE DETAILS ==========\n";
+    cout << left << setw(15) << "Course"
+         << setw(15) << "Grade"
+         << setw(15) << "Credits" << endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << left << setw(15) << courseName[i]
+             << setw(15) << grade[i]
+             << setw(15) << creditHours[i] << endl;
+    }
+
+    // Display results
+    cout << "\n========== RESULT ==========\n";
+    cout << "Total Credits      : " << totalCredits << endl;
+    cout << "Total Grade Points : " << totalGradePoints << endl;
+    cout << "Semester GPA       : " << gpa << endl;
+    cout << "Overall CGPA       : " << overallCGPA << endl;
+
+    return 0;
+}
